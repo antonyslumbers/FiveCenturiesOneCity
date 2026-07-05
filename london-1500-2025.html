@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<!--
+  FIVE CENTURIES, ONE CITY — The greatest building started in London, every 25 years, 1500-2025
+  Antony Slumbers — #SpaceAsAService
+  Single self-contained HTML file. No build step, no local dependencies.
+
+  ============================== DATA PROVENANCE ==============================
+  Criteria (agreed with Antony, 5 Jul 2026):
+    - "Greatest" = architectural/historical significance, judged as an art historian would,
+      not a single quantifiable metric (meaningless before the 20th century).
+    - Scope = Greater London, not just the City of London Square Mile.
+    - "Started" = first substantive construction, not design/commission date.
+    - Only buildings still standing today are eligible.
+
+  IMAGE SOURCING: Photographs are real, sourced from Wikimedia Commons, embedded via
+  Commons' own Special:FilePath mechanism (the standard method for external hotlinking).
+  "More about this building" links to Wikipedia; "Photo source" links to the Commons file
+  page, which carries full photographer attribution and licence terms (mostly CC BY-SA).
+
+  VERIFIED WITH SOURCED IMAGES (20 of 20): every landmark now carries a real, properly-
+    licensed photograph. Middle Temple Hall's image is the gatehouse, not the Hall itself —
+    the Hall sits behind a courtyard with no clean exterior photograph available. Sourcing
+    method: each building's canonical Wikidata "image" property where set (the same image
+    Wikipedia itself displays), falling back to a Wikipedia Featured Picture or clearly-
+    titled Commons category image where no Wikidata property existed (Houses of Parliament,
+    Tower Bridge, County Hall). The British Museum's image was supplied directly by Antony
+    and verified against its Wikidata entry (Q6373) before use. St Pancras and One Canada
+    Square images were also swapped for Antony-supplied replacements: St Pancras's was a
+    genuine correction (the original pick was the Wikidata "image of interior" field, not
+    the primary exterior "image" field on the same entity — a mis-selection on my part, not
+    a matter of taste). Canary Wharf's replacement is from the "London MMB" Commons series —
+    licence confirmed by strong inference (every other file in that systematic series is
+    CC BY-SA 3.0, and Wikipedia's non-free content policy rules out anything but a freely-
+    licensed image for a plain exterior shot used inline) rather than a direct license-page
+    hit, unlike every other image in this set.
+
+  ONE DELIBERATE GAP (1575-1600): no surviving building of the first rank started in this
+  window could be found. Tudor London was overwhelmingly timber-built; what survives from
+  this specific 25-year span is minor. Shown as an honest gap, not papered over with a
+  weak substitute.
+
+  "More info" links use Wikipedia's search endpoint rather than guessed direct article
+  URLs, since exact slugs weren't individually re-verified for every entry this session —
+  this guarantees a working, relevant result rather than risking a broken direct link.
+  =============================================================================
+-->
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Five Centuries, One City — London's Greatest Buildings, 1500–2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --dark:#222831; --dark-lighter:#4A5568; --gold:#fbb040; --yellow:#f9ed32;
+    --steel:#7DA7C4; --muted-gold:#D4930F; --mid-grey:#A0AEC0; --white:#FFFFFF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--dark);color:var(--white);font-family:'Inter',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.5}
+  a{color:inherit}
+
+  header{padding:64px 32px 40px;max-width:900px;margin:0 auto;text-align:center}
+  .eyebrow{font:600 .72rem 'Inter',system-ui,sans-serif;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--gold)}
+  h1{font:700 clamp(2rem,5vw,3.2rem)/1.1 'Fraunces',Georgia,serif;margin-top:14px}
+  .sub{font:400 1rem/1.6 'Inter',system-ui,sans-serif;color:var(--mid-grey);
+    margin-top:16px;max-width:620px;margin-left:auto;margin-right:auto}
+
+  #rail{position:sticky;top:0;z-index:10;background:rgba(34,40,49,.92);
+    backdrop-filter:blur(10px);border-bottom:1px solid rgba(160,174,192,.18);
+    padding:14px 20px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+  #rail::-webkit-scrollbar{display:none}
+  .tick{flex:none;font:600 .68rem 'Inter',system-ui,sans-serif;color:var(--mid-grey);
+    background:rgba(74,85,104,.35);border:1px solid rgba(160,174,192,.2);
+    border-radius:20px;padding:7px 13px;white-space:nowrap;text-decoration:none;
+    transition:border-color .2s,color .2s}
+  .tick:hover{border-color:var(--gold);color:var(--gold)}
+  .tick.gap{opacity:.5;font-style:italic}
+
+  #legend{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;
+    max-width:900px;margin:0 auto 8px;padding:0 32px 8px}
+  .lRow{display:flex;align-items:center;gap:8px;font:500 .74rem 'Inter',system-ui,sans-serif;
+    color:var(--mid-grey)}
+  .swatch{width:12px;height:12px;border-radius:3px;flex:none}
+
+  main{max-width:900px;margin:0 auto;padding:20px 32px 100px}
+  .card{display:grid;grid-template-columns:1fr;gap:0;margin:56px 0;
+    border-radius:14px;overflow:hidden;background:rgba(74,85,104,.16);
+    border:1px solid rgba(160,174,192,.14);scroll-margin-top:80px}
+  .card .figure{position:relative;width:100%;aspect-ratio:16/10;background:var(--dark-lighter);
+    overflow:hidden}
+  .card .figure img{width:100%;height:100%;object-fit:cover;display:block}
+  .card .figure .placeholder{position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:8px;text-align:center;padding:20px;
+    background:repeating-linear-gradient(135deg,rgba(160,174,192,.06) 0 12px,
+      rgba(160,174,192,.02) 12px 24px)}
+  .placeholder .icon{font:400 1.8rem serif;color:var(--mid-grey);opacity:.5}
+  .placeholder span{font:500 .72rem 'Inter',system-ui,sans-serif;color:var(--mid-grey);
+    max-width:260px}
+  .card .body{padding:26px 28px 28px}
+  .period{display:inline-block;font:600 .68rem 'Inter',system-ui,sans-serif;
+    letter-spacing:.1em;text-transform:uppercase;padding:5px 11px;border-radius:20px;
+    margin-bottom:14px}
+  .card h2{font:700 1.5rem/1.25 'Fraunces',Georgia,serif}
+  .dates{font:500 .82rem 'Inter',system-ui,sans-serif;color:var(--mid-grey);
+    margin-top:6px;font-variant-numeric:tabular-nums}
+  .dates b{color:var(--white);font-weight:600}
+  .note{font:400 .92rem/1.6 'Inter',system-ui,sans-serif;color:var(--white);
+    margin-top:14px;opacity:.92}
+  .links{display:flex;gap:18px;margin-top:18px;flex-wrap:wrap}
+  .links a{font:600 .74rem 'Inter',system-ui,sans-serif;text-decoration:none;
+    color:var(--gold);border-bottom:1px solid rgba(251,176,64,.35);padding-bottom:2px}
+  .links a.credit{color:var(--mid-grey);border-color:rgba(160,174,192,.25)}
+  .links a:hover{border-color:currentColor}
+
+  .card.gap{background:transparent;border:1.5px dashed rgba(160,174,192,.3)}
+  .card.gap .body{padding:32px 28px;text-align:center}
+  .card.gap h2{color:var(--mid-grey);font-style:italic}
+  .card.gap .note{color:var(--mid-grey);max-width:480px;margin:14px auto 0}
+
+  footer{text-align:center;padding:20px 32px 48px;font:600 .7rem 'Inter',system-ui,sans-serif;
+    letter-spacing:.06em;color:var(--mid-grey)}
+  footer b{color:var(--gold);font-weight:600}
+
+  @media (min-width:720px){
+    .card{grid-template-columns:340px 1fr}
+    .card .figure{aspect-ratio:auto;height:100%}
+    .card.gap{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">London · 1500 – 2025</div>
+  <h1>Five centuries, one city</h1>
+  <p class="sub">For every 25-year span, the greatest building started in London — and, where it still stands today, what became of it. Only verified dates; one honest gap where no defensible example survives.</p>
+</header>
+
+<div id="legend">
+  <div class="lRow"><span class="swatch" style="background:#D4930F"></span>Tudor &amp; Stuart</div>
+  <div class="lRow"><span class="swatch" style="background:#7DA7C4"></span>Georgian</div>
+  <div class="lRow"><span class="swatch" style="background:#fbb040"></span>Victorian</div>
+  <div class="lRow"><span class="swatch" style="background:#FFFFFF"></span>Modern</div>
+</div>
+
+<nav id="rail"></nav>
+
+<main id="cards"></main>
+
+<footer>Antony Slumbers — <b>#SpaceAsAService</b></footer>
+
+<script>
+(function(){
+'use strict';
+
+var ERA = {
+  tudor:   {color:'#D4930F', label:'Tudor & Stuart'},
+  georgian:{color:'#7DA7C4', label:'Georgian'},
+  victorian:{color:'#fbb040', label:'Victorian'},
+  modern:  {color:'#FFFFFF', label:'Modern'}
+};
+
+function commonsImg(filename){
+  var f = filename.replace(/ /g, '_');
+  return 'https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent(f).replace(/%2F/g,'/') + '?width=900';
+}
+function commonsFilePage(filename){
+  var f = filename.replace(/ /g, '_');
+  return 'https://commons.wikimedia.org/wiki/File:' + encodeURIComponent(f).replace(/%2F/g,'/');
+}
+function wikiSearch(name){
+  return 'https://en.wikipedia.org/w/index.php?search=' + encodeURIComponent(name + ' London') + '&title=Special:Search';
+}
+
+var ENTRIES = [
+ {period:'1500–25', era:'tudor', name:'Henry VII Chapel, Westminster Abbey',
+  started:1503, finished:'1516 (decoration to 1519)',
+  note:'Henry VII\u2019s royal mausoleum and the last great flowering of English Perpendicular Gothic \u2014 the pendant fan-vault ceiling remains one of the most celebrated in Europe.',
+  image:"Henry VII's Chapel, Westminster Abbey - geograph.org.uk - 2301502.jpg"},
+
+ {period:'1525–50', era:'tudor', name:"St James's Palace",
+  started:1531, finished:'1536',
+  note:'Built by Henry VIII on the site of a former leper hospital. Still a working royal palace \u2014 the Court of St James\u2019s takes its name from it.',
+  image:"St James's Palace, London - geograph.org.uk - 7963883.jpg"},
+
+ {period:'1550–75', era:'tudor', name:'Middle Temple Hall',
+  started:1562, finished:'1573',
+  note:'One of the finest Elizabethan halls in England, and the setting of the first recorded performance of Shakespeare\u2019s Twelfth Night, in 1602. (Photo shows the Middle Temple gatehouse \u2014 the Hall itself sits behind a courtyard with no clean street-level view.)',
+  image:'Gateway to Middle Temple - geograph.org.uk - 3387493.jpg'},
+
+ {period:'1575–1600', gap:true,
+  note:'No surviving building of the first rank could be verified as started in this specific window. Tudor London was overwhelmingly timber-built, and the Great Fire (1666) and the Blitz (1940\u201341) between them account for most of what didn\u2019t survive. Rather than substitute a lesser building and call it "the greatest," this slot is left honestly open.'},
+
+ {period:'1600–25', era:'tudor', name:'Banqueting House, Whitehall',
+  started:1619, finished:'1622',
+  note:'Inigo Jones\u2019s masterpiece \u2014 the first fully classical Renaissance building in England, and the only major surviving fragment of the old Palace of Whitehall.',
+  image:'The Banqueting House, Whitehall - geograph.org.uk - 5324507.jpg'},
+
+ {period:'1625–50', era:'tudor', name:"Queen's House, Greenwich",
+  started:'1616 (false start); main build 1629', finished:'1635',
+  note:'Also Inigo Jones \u2014 England\u2019s first fully Palladian house, built for Anne of Denmark and Henrietta Maria. Now part of Royal Museums Greenwich.',
+  image:'Queens House 2006.jpg'},
+
+ {period:'1650–75', era:'tudor', name:'St Stephen Walbrook',
+  started:1672, finished:'1679 (spire added 1713\u201315)',
+  note:'Wren\u2019s own parish church, and by his own account a trial run for the dome of St Paul\u2019s. Pevsner ranked it among the ten most important buildings in England.',
+  image:'City parish churches - St. Stephen Walbrook - geograph.org.uk - 490996.jpg'},
+
+ {period:'1675–1700', era:'tudor', name:"St Paul's Cathedral",
+  started:1675, finished:'1710',
+  note:'Christopher Wren\u2019s rebuilding after the Great Fire \u2014 arguably the single greatest building on this entire list, and still the City\u2019s spiritual and visual anchor.',
+  image:"Saint Paul's cathedral, London 1.jpg"},
+
+ {period:'1700–25', era:'georgian', name:'Christ Church, Spitalfields',
+  started:1714, finished:'1729',
+  note:'Nicholas Hawksmoor\u2019s soaring East London parish church, built as part of the "Fifty New Churches" programme.',
+  image:'Christ Church, Commercial Street Spitalfields - East end - geograph.org.uk - 1017043.jpg'},
+
+ {period:'1725–50', era:'georgian', name:'Mansion House',
+  started:1739, finished:'1752',
+  note:'The official residence of the Lord Mayor of London \u2014 still in use for that exact purpose nearly three centuries later.',
+  image:'Mansion House, City of London (40478193673).jpg'},
+
+ {period:'1750–75', era:'georgian', name:'Spencer House',
+  started:1756, finished:'1766',
+  note:'John Vardy and James "Athenian" Stuart\u2019s Palladian townhouse for the first Earl Spencer \u2014 one of London\u2019s earliest and finest fully realised neoclassical interiors.',
+  image:'Spencer House.jpg'},
+
+ {period:'1775–1800', era:'georgian', name:'Somerset House',
+  started:1776, finished:'1801 onward (phased)',
+  note:'Sir William Chambers\u2019s grand public office building on the Strand, built to consolidate government departments under one roof.',
+  image:'Somerset House, Strand.jpg'},
+
+ {period:'1800–25', era:'georgian', name:'British Museum',
+  started:1823, finished:'1852',
+  note:'Robert Smirke\u2019s Greek Revival building \u2014 one of the defining statements of early-19th-century London civic architecture.',
+  image:'British Museum from NE 2 (cropped).JPG'},
+
+ {period:'1825–50', era:'victorian', name:'Houses of Parliament',
+  started:1840, finished:'1870s (phased)',
+  note:'Charles Barry and Augustus Pugin\u2019s rebuilding of the Palace of Westminster after the 1834 fire \u2014 as recognisable a silhouette as any building in the world.',
+  image:'Palace of Westminster, London - Feb 2007.jpg'},
+
+ {period:'1850–75', era:'victorian', name:'St Pancras Station & Midland Grand Hotel',
+  started:1868, finished:'1876',
+  note:'George Gilbert Scott\u2019s Gothic Revival cathedral of the railway age \u2014 nearly demolished in the 1960s, now the international Eurostar terminal.',
+  image:'St Pancras Railway Station 2012-06-23.jpg'},
+
+ {period:'1875–1900', era:'victorian', name:'Tower Bridge',
+  started:1886, finished:'1894',
+  note:'Horace Jones and John Wolfe Barry\u2019s bascule bridge \u2014 instantly recognisable, and still a fully working piece of infrastructure.',
+  image:'Tower Bridge from London City Hall 2015.jpg'},
+
+ {period:'1900–25', era:'modern', name:'County Hall',
+  started:1911, finished:'1922 (extensions to 1939)',
+  note:'Ralph Knott\u2019s riverside headquarters for London\u2019s government, built across three decades interrupted by two world wars.',
+  image:'County Hall, London (August 2023) 01.jpg'},
+
+ {period:'1925–50', era:'modern', name:'Battersea Power Station',
+  started:1929, finished:'1935 (Station A); full building 1955',
+  note:'Giles Gilbert Scott\u2019s brick cathedral of industry \u2014 derelict for decades, now redeveloped as one of London\u2019s largest mixed-use sites.',
+  image:'Battersea Power Station, London-22May2010.jpg'},
+
+ {period:'1950–75', era:'modern', name:'Post Office Tower (BT Tower)',
+  started:1961, finished:'1965',
+  note:'Britain\u2019s tallest building on completion, and for years the most instantly recognisable addition to the London skyline since St Paul\u2019s dome.',
+  image:'BT Tower-1.jpg'},
+
+ {period:'1975–2000', era:'modern', name:'One Canada Square, Canary Wharf',
+  started:1988, finished:'1991',
+  note:'Cesar Pelli\u2019s tower gave London a second financial skyline almost overnight, and was the UK\u2019s tallest building for over a decade.',
+  image:'London MMB S6 Canary Wharf.jpg'},
+
+ {period:'2000–25', era:'modern', name:'The Shard',
+  started:2009, finished:'2012',
+  note:'Renzo Piano\u2019s tapering glass spire \u2014 currently the tallest building in the United Kingdom, and the most photographed addition to London\u2019s skyline this century.',
+  image:'The Shard from the Sky Garden 2015.jpg'}
+];
+
+var rail = document.getElementById('rail');
+var cards = document.getElementById('cards');
+
+ENTRIES.forEach(function(e, i){
+  var id = 'p' + i;
+
+  var t = document.createElement('a');
+  t.href = '#' + id;
+  t.className = 'tick' + (e.gap ? ' gap' : '');
+  t.textContent = e.period;
+  if (!e.gap) t.style.borderColor = ERA[e.era].color + '55';
+  rail.appendChild(t);
+
+  var card = document.createElement('article');
+  card.id = id;
+  card.className = 'card' + (e.gap ? ' gap' : '');
+
+  if (e.gap) {
+    card.innerHTML =
+      '<div class="body">' +
+        '<span class="period" style="background:rgba(160,174,192,.15);color:#A0AEC0">' + e.period + '</span>' +
+        '<h2>No surviving example of the first rank</h2>' +
+        '<p class="note">' + e.note + '</p>' +
+      '</div>';
+    cards.appendChild(card);
+    return;
+  }
+
+  var eraInfo = ERA[e.era];
+  var figureHtml = e.image
+    ? '<img src="' + commonsImg(e.image) + '" alt="' + e.name + '" loading="lazy">'
+    : '<div class="placeholder"><span class="icon">&#9633;</span><span>Image sourcing pending &mdash; real photograph to follow</span></div>';
+
+  var linksHtml = '<a href="' + wikiSearch(e.name) + '" target="_blank" rel="noopener">More about this building &rarr;</a>';
+  if (e.image) {
+    linksHtml += '<a class="credit" href="' + commonsFilePage(e.image) + '" target="_blank" rel="noopener">Photo source &amp; credit</a>';
+  }
+
+  card.innerHTML =
+    '<div class="figure">' + figureHtml + '</div>' +
+    '<div class="body">' +
+      '<span class="period" style="background:' + eraInfo.color + '22;color:' + eraInfo.color + '">' + e.period + '</span>' +
+      '<h2>' + e.name + '</h2>' +
+      '<div class="dates">Started <b>' + e.started + '</b> &middot; Finished <b>' + e.finished + '</b></div>' +
+      '<p class="note">' + e.note + '</p>' +
+      '<div class="links">' + linksHtml + '</div>' +
+    '</div>';
+  cards.appendChild(card);
+});
+})();
+</script>
+</body>
+</html>
